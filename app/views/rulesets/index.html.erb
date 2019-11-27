@@ -1,7 +1,11 @@
-<div id="root"></div>
-<script type="text/javascript" src="/prism-assets/prism.js"></script>
-<script type="text/javascript" async src="/prism-assets/bundle.js"></script>
-<script type="text/javascript">
-  Prism.run("#root", "/app.rb");
-</script>
+<h2>Rulesets</h2>
 
+<%= link_to "Create a ruleset", new_ruleset_path %>
+
+<ul>
+  <% Ruleset.all.each do |ruleset| %>
+    <li>
+      <%= link_to ruleset.name, ruleset %>
+    </li>
+  <% end %>
+</ul>

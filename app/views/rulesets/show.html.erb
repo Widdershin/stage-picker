@@ -1,0 +1,19 @@
+
+<h2><%= @ruleset.name %><h2>
+
+<h3>Starters</h3>
+<ul>
+  <% @ruleset.starters.each do |stage| %>
+      <li><%= stage.name %></li>
+  <% end %>
+</ul>
+
+<h3>Counterpicks</h3>
+<ul>
+  <% @ruleset.counterpicks.each do |stage| %>
+    <li><%= stage.name %></li>
+  <% end %>
+</ul>
+
+<%= link_to "Play", play_path(@ruleset) %>
+

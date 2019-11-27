@@ -944,11 +944,11 @@ var currentContainer;
 var allLoaded = false;
 var modulesToLoad = [];
 
-function run(element, main) {
+function run(element, main, config = {}) {
   currentContainer = document.getElementById('root');
   modulesToLoad = [fetchAndLoad("/prism-ruby/prism.rb"), fetchAndLoad(main)];
 
-  load(modulesToLoad, main);
+  load(modulesToLoad, main, config);
 }
 
 window.Prism = {run};
@@ -974,7 +974,7 @@ function fetchAndLoad(name) {
   });
 }
 
-function load(modulesToLoad, main) {
+function load(modulesToLoad, main, config = {}) {
   modulePromise.then(() => {
     Promise.all(modulesToLoad).then((modules) => {
       for (let m of modules) {
@@ -992,7 +992,7 @@ function load(modulesToLoad, main) {
         FS.writeFile(`./${m.name}`, m.text);
       }
 
-      const result = Module.ccall("load", "number", ["string"], [main]);
+      const result = Module.ccall("load", "number", ["string", "string"], [main, JSON.stringify(config)]);
       if (result === 0) {
         render();
       }
@@ -1018,5 +1018,7 @@ const modulePromise = new Promise((resolve, reject) => {
     monitorRunDependencies: function(e) {}
   };
 });
+
+
 
 },{"snabbdom":10,"snabbdom/h":1,"snabbdom/modules/attributes":4,"snabbdom/modules/class":5,"snabbdom/modules/dataset":6,"snabbdom/modules/eventlisteners":7,"snabbdom/modules/props":8,"snabbdom/modules/style":9}]},{},[13]);

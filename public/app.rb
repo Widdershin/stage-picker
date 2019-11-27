@@ -8,19 +8,8 @@ class Stage < Prism::Component
   end
 end
 
-DEFAULT_STAGES = [
-  ["Battlefield", "https://www.smashbros.com/assets_v2/img/stage/stage_img1.jpg"],
-  ["Final Destination", "https://www.smashbros.com/assets_v2/img/stage/stage_img3.jpg"],
-  ["Smashville", "https://www.ssbwiki.com/images/0/02/SSBU-Smashville.png"],
-  ["Town and City", "https://www.ssbwiki.com/images/2/26/SSBU-Town_and_City.png"],
-  ["Pokémon Stadium 2", "https://www.smashbros.com/assets_v2/img/stage/stage_img40.jpg"]
-].map { |(name, img)| Stage.new(name: name, img: img) }
-
-DEFAULT_COUNTERPICKS = [
-  ["Kalos Pokémon League", "https://www.ssbwiki.com/images/b/bf/SSBU-Kalos_Pok%C3%A9mon_League.png"],
-  ["Lylat Cruise", "https://www.smashbros.com/assets_v2/img/stage/stage_img39.jpg"],
-  ["Yoshi's Story", "https://www.smashbros.com/assets_v2/img/stage/stage_img19.jpg"]
-].map { |(name, img)| Stage.new(name: name, img: img) }
+DEFAULT_STAGES = CONFIG.fetch("starters").map { |stage| Stage.new(name: stage.fetch("name"), img: stage.fetch("image_url")) }
+DEFAULT_COUNTERPICKS = CONFIG.fetch("counterpicks").map { |stage| Stage.new(name: stage.fetch("name"), img: stage.fetch("image_url")) }
 
 class Match
   attr_reader :starters
@@ -185,7 +174,7 @@ class StagePicker < Prism::Component
   end
 
   def header
-    div('.header', 'smashpick.gg')
+    div('.header', 'smashpick.app')
   end
 
   def render

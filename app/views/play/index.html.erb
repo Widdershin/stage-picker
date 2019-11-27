@@ -1,0 +1,8 @@
+<div id="root"></div>
+<script type="text/javascript" src="/prism-assets/prism.js"></script>
+<script type="text/javascript" async src="/prism-assets/bundle.js"></script>
+<script type="text/javascript">
+  const config = <%= @ruleset.config.to_json.html_safe %>;
+  Prism.run("#root", "/app.rb", config);
+</script>
+

@@ -1,0 +1,42 @@
+
+<h2>New Ruleset</h2>
+
+<%= form_with(model: @ruleset) do |f| %>
+  <div>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  </div>
+  <div>
+  <%= f.label :description %>
+  <%= f.text_area :description %>
+  </div>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Starter</th>
+      <th>Counterpick</th>
+      <th>Exclude</th>
+    </tr>
+    <% Stage.competitive.order('name asc').each do |stage| %>
+      <tr>
+        <td><%= stage.name %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :starter %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :counterpick %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :exclude, checked: true %></td>
+      </tr>
+    <% end %>
+
+    <% Stage.not_competitive.order('name asc').each do |stage| %>
+      <tr>
+        <td><%= stage.name %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :starter %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :counterpick %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :exclude, checked: true %></td>
+      </tr>
+
+    <% end %>
+  </table>
+
+  <%= f.submit :create %>
+<% end %>
