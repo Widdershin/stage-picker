@@ -28,8 +28,10 @@ class Match
   attr_reader :state
   attr_reader :bans
   attr_reader :picked_stage
+  attr_reader :stages_played
 
   def initialize
+    @modified_dsr = true
     @round = 0
     @state = :awaiting_roles
 
@@ -38,6 +40,7 @@ class Match
 
     @bans = []
     @picked_stage = nil
+    @stages_played = []
   end
 
   def counterpicks_enabled?
@@ -57,7 +60,8 @@ class Match
   end
 
   def disabled?(stage)
-    (@counterpicks.include?(stage) unless counterpicks_enabled?) ||
+    (@stages_played.include?(stage)) ||
+    (@counterpicks.include?(stage) && !counterpicks_enabled?) ||
     (@state == :picking && @bans.include?(stage))
   end
 
@@ -80,6 +84,11 @@ class Match
   end
 
   def select_stage(stage)
+    if @state == :banning && banned?(stage)
+      @bans.delete(stage)
+      return
+    end
+
     return if disabled?(stage)
 
     case @state
@@ -91,6 +100,7 @@ class Match
   end
 
   def confirm_pick
+    @stages_played << @picked_stage
     @state = :playing
   end
 
@@ -156,6 +166,9 @@ class StagePicker < Prism::Component
           *match.starters.map { |stage| render_stage(stage) },
           div(".break"),
           *match.counterpicks.map { |stage| render_stage(stage) }
+          #*(match.starters + match.counterpicks)
+          #  .reject { |stage| match.disabled?(stage) }
+          #  .map { |stage| render_stage(stage) },
         ]),
         button("Pick a stage", props: {disabled: !match.picked_stage}, onClick: call_match(:confirm_pick)),
       ]
@@ -171,9 +184,15 @@ class StagePicker < Prism::Component
 
   end
 
+  def header
+    div('.header', 'smashpick.gg')
+  end
+
   def render
     div(".stage-picker", [
+      header,
       *render_state,
+      div('.button-placeholder')
     ])
   end
 end

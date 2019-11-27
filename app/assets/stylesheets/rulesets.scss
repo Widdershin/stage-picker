@@ -1,0 +1,145 @@
+html, body {
+  font-family: sans-serif;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  background: #111;
+  color: #DDD;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+
+.stage-picker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.stages {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  justify-content: center;
+}
+
+.stage {
+  font-weight: bolder;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0.5em 0.5em;
+  max-width: 40%;
+}
+
+@media screen and (orientation:portrait) {
+  button {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .button-placeholder {
+    display: block;
+  }
+}
+
+@media screen and (orientation:landscape) {
+  .stage {
+    max-width: 16%;
+  }
+
+  button {
+    position: relative;
+  }
+
+  .button-placeholder {
+    display: none;
+  }
+}
+
+@media screen and (orientation:landscape) and (max-aspect-ratio:7/4) {
+  .stage {
+    max-width: 25%;
+  }
+}
+
+@media screen and (orientation:landscape) and (max-aspect-ratio:16/11) {
+  .stage {
+    max-width: 30%;
+  }
+}
+
+.stage.banned {
+  color: #FAA;
+}
+
+.stage.banned img {
+  border: 2px solid red;
+}
+
+.stage img {
+  background: #111;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.stage.disabled img {
+  filter: brightness(20%);
+}
+
+.stage.disabled {
+  color: gray;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.stage.picked {
+  color: skyblue;
+}
+
+.stage.picked img {
+  border: 3px solid aqua;
+}
+
+.stage-picker button {
+  font-size: 1.6rem;
+  line-height: 2em;
+}
+
+
+.stage-container {
+  flex: 0 0 5em;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.header {
+  text-align: center;
+  padding: 5px;
+  background: #333;
+  border-bottom: 1px solid #999;
+  font-family: monospace;
+}
+
+.button-placeholder {
+  height: 5em;
+  width: 100%;
+  flex-shrink: 0;
+}
