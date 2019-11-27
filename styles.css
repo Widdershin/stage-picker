@@ -1,0 +1,77 @@
+html, body {
+  font-family: sans-serif;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+
+.stage-picker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.stages {
+  padding-top: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  height: 100%;
+  justify-content: center;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0.5em 0.1em;
+  max-width: 19%;
+}
+
+.stage.banned img {
+  border: 2px solid red;
+}
+
+.stage img {
+  background: limegreen;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.stage.disabled {
+  filter: brightness(30%);
+  color: lightgrey;
+}
+
+.stage.picked img {
+  border: 3px solid aqua;
+}
+
+.stage-picker button {
+  font-size: 1.6rem;
+  line-height: 2em;
+}
+
+
+.stage-container {
+  flex: 0 0 5em;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
