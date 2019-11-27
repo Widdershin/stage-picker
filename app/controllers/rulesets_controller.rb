@@ -6,6 +6,10 @@ class RulesetsController < ApplicationController
     @ruleset = Ruleset.find(params[:id])
   end
 
+  def edit
+    @ruleset = Ruleset.find(params[:id])
+  end
+
   def new
     @ruleset = Ruleset.new
   end
@@ -22,5 +26,23 @@ class RulesetsController < ApplicationController
     ruleset.save!
 
     redirect_to ruleset
+  end
+
+  def update
+    @ruleset = Ruleset.find(params[:id])
+
+    Ruleset.transaction do
+      @ruleset.ruleset_stages.destroy_all
+
+      params["ruleset"].each do |key, value|
+        if (value == "starter" || value == "counterpick") && key =~ /^include_(\d+)/
+          @ruleset.ruleset_stages.build(stage_id: $1.to_i, is_starter: value == "starter")
+        end
+      end
+
+      @ruleset.save!
+    end
+
+    redirect_to @ruleset
   end
 end

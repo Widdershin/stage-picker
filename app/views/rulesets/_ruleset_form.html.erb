@@ -1,0 +1,39 @@
+<%= form_with(model: @ruleset) do |f| %>
+  <div>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  </div>
+  <div>
+  <%= f.label :description %>
+  <%= f.text_area :description %>
+  </div>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Starter</th>
+      <th>Counterpick</th>
+      <th>Exclude</th>
+    </tr>
+    <% Stage.competitive.order('name asc').each do |stage| %>
+      <tr>
+        <td><%= stage.name %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :starter, checked: @ruleset.starter?(stage) %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :counterpick, checked: @ruleset.counterpick?(stage) %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :exclude, checked: !@ruleset.starter?(stage) && !@ruleset.counterpick?(stage) %></td>
+      </tr>
+    <% end %>
+
+    <% Stage.not_competitive.order('name asc').each do |stage| %>
+      <tr>
+        <td><%= stage.name %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :starter, checked: @ruleset.starter?(stage) %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :counterpick, checked: @ruleset.counterpick?(stage) %></td>
+        <td><%= f.radio_button "include_#{stage.id}", :exclude, checked: !@ruleset.starter?(stage) && !@ruleset.counterpick?(stage) %></td>
+      </tr>
+
+    <% end %>
+  </table>
+
+  <%= f.submit :Save %>
+<% end %>

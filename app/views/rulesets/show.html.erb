@@ -1,6 +1,8 @@
 
 <h2><%= @ruleset.name %><h2>
 
+<%= link_to "Edit", edit_ruleset_path(@ruleset) %>
+
 <h3>Starters</h3>
 <ul>
   <% @ruleset.starters.each do |stage| %>
