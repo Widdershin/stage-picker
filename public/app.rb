@@ -8,8 +8,12 @@ class Stage < Prism::Component
   end
 end
 
-DEFAULT_STAGES = CONFIG.fetch("starters").map { |stage| Stage.new(name: stage.fetch("name"), img: stage.fetch("image_url")) }
-DEFAULT_COUNTERPICKS = CONFIG.fetch("counterpicks").map { |stage| Stage.new(name: stage.fetch("name"), img: stage.fetch("image_url")) }
+def load_stages(stages_data)
+  stages_data.map { |stage_data| Stage.new(name: stage_data.fetch("name"), img: stage_data.fetch("image_url")) }
+end
+
+DEFAULT_STAGES = load_stages(CONFIG.fetch("starters"))
+DEFAULT_COUNTERPICKS = load_stages(CONFIG.fetch("counterpicks"))
 
 class Match
   attr_reader :starters
@@ -143,21 +147,16 @@ class StagePicker < Prism::Component
     when :banning
       [
         div(".stages", [
-          *match.starters.map { |stage| render_stage(stage) },
-          div(".break"),
-          *match.counterpicks.map { |stage| render_stage(stage) }
+          *(match.starters + match.counterpicks)
+            .map { |stage| render_stage(stage) },
         ]),
         button("Ban two stages", props: {disabled: match.bans.length < 2}, onClick: call_match(:confirm_bans)),
       ]
     when :picking
       [
         div(".stages", [
-          *match.starters.map { |stage| render_stage(stage) },
-          div(".break"),
-          *match.counterpicks.map { |stage| render_stage(stage) }
-          #*(match.starters + match.counterpicks)
-          #  .reject { |stage| match.disabled?(stage) }
-          #  .map { |stage| render_stage(stage) },
+          *(match.starters + match.counterpicks)
+            .map { |stage| render_stage(stage) },
         ]),
         button("Pick a stage", props: {disabled: !match.picked_stage}, onClick: call_match(:confirm_pick)),
       ]
@@ -169,8 +168,6 @@ class StagePicker < Prism::Component
     else
       div("Make a view for #{match.state}")
     end
-
-
   end
 
   def header

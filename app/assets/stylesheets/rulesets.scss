@@ -71,13 +71,13 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (orientation:landscape) and (max-aspect-ratio:7/4) {
   .stage {
-    max-width: 25%;
+    max-width: 20%;
   }
 }
 
 @media screen and (orientation:landscape) and (max-aspect-ratio:16/11) {
   .stage {
-    max-width: 30%;
+    max-width: 20%;
   }
 }
 
@@ -118,10 +118,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 button {
-  font-size: 1.6rem;
-  line-height: 2em;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  margin: 0 auto;
+  margin-bottom: 1em;
 }
-
 
 .stage-container {
   flex: 0 0 5em;
