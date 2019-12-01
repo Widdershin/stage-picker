@@ -22,7 +22,6 @@ a {
   .picker-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     flex-grow: 1;
   }
 h1, h2, h3, h4, h5, h6 {
@@ -32,6 +31,7 @@ h1, h2, h3, h4, h5, h6 {
 .stages {
   display: flex;
   flex-wrap: wrap;
+  align-items: start;
   height: 100%;
   justify-content: center;
 }
@@ -109,10 +109,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 button {
-  font-size: 1.8rem;
   flex-shrink: 0;
-  margin: 0 auto;
-  margin-bottom: 1em;
+  margin: 1em auto;
+  font-size: larger;
 }
 
 .stage-container {
@@ -139,13 +138,16 @@ button {
 }
 
 .roles {
-  font-size: 3em;
+  font-size: larger;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   flex-grow: 1;
+  > div {
+    margin: 1em;
+  }
   input {
-    font-size: 1em;
+    font-size: larger;
     width: 8em;
     text-align: center;
     margin: 0.5em;
@@ -167,6 +169,11 @@ button {
   button {
     margin: 0.5em;
   }
+
+
+  .stage-icon {
+    margin-bottom: 1em;
+  }
 }
 
   .match-stats {
@@ -174,8 +181,8 @@ button {
     justify-content: space-between;
     background: #222;
     margin: auto;
+    margin-bottom: 1em;
     padding: 0.5em;
-    font-size: 1.5em;
     min-width: 15em;
 
     div {
@@ -187,6 +194,11 @@ button {
     .active {
       color: yellow;
     }
+
+    .scoreboard {
+      font-size: larger;
+      margin-top: 0.5em;
+    }
   }
 
   .settings {
@@ -196,7 +208,6 @@ button {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1.5em;
     margin: 1em auto;
 
     > div {

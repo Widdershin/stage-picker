@@ -137,9 +137,20 @@ class Match
     end
   end
 
+  def score_to_win
+    (@best_of / 2).ceil
+  end
+
   def game_over?
-    score_to_win = (@best_of / 2).ceil
-    @p1_score == score_to_win || @p2_score == score_to_win
+    p1_won? || p2_won?
+  end
+
+  def p1_won?
+    @p1_score >= score_to_win
+  end
+
+  def p2_won?
+    @p2_score >= score_to_win
   end
 end
 
@@ -148,13 +159,15 @@ class Input < Prism::Component
 
   def initialize(className, value = "")
     @className = className
-    @value = value
+    @value = ""
+    @initial_value = value
   end
 
   def render
     input(
       @className,
       onInput: call(:value=).with_target_data(:value),
+      attrs: {placeholder: @initial_value},
       props: {value: value}
     )
   end
@@ -180,10 +193,12 @@ class StagePicker < Prism::Component
   end
 
   def p1
+    return "Player 1" if @player1.value == ""
     @player1.value
   end
 
   def p2
+    return "Player 2" if @player2.value == ""
     @player2.value
   end
 
@@ -204,6 +219,7 @@ class StagePicker < Prism::Component
       ]
     )
   end
+
   def current_player
     case match.current_player
     when 0
@@ -212,6 +228,19 @@ class StagePicker < Prism::Component
       p2
     else
       ""
+    end
+  end
+
+  def ban_button_text
+    case match.bans.size
+    when 0
+      "Ban two stages"
+    when 1
+      "Ban one stage"
+    when 2
+      "Confirm bans"
+    else
+      "Fuck you and the horse you rode in on"
     end
   end
 
@@ -251,25 +280,26 @@ class StagePicker < Prism::Component
       ]
     when :banning
       [
+        button("#{current_player}: #{ban_button_text}", props: {disabled: match.bans.length < 2}, onClick: call_match(:confirm_bans)),
         div(".stages", [
           *(match.starters + match.counterpicks)
             .map { |stage| render_stage(stage) },
         ]),
-        button("#{current_player}: Ban two stages", props: {disabled: match.bans.length < 2}, onClick: call_match(:confirm_bans)),
       ]
     when :picking
       [
+        button("#{current_player}: Pick a stage", props: {disabled: !match.picked_stage}, onClick: call_match(:confirm_pick)),
         div(".stages", [
           *(match.starters + match.counterpicks)
             .map { |stage| render_stage(stage) },
         ]),
-        button("#{current_player}: Pick a stage", props: {disabled: !match.picked_stage}, onClick: call_match(:confirm_pick)),
       ]
     when :playing
       [
         div(".match-screen", [
           h1("Game ##{match.round + 1}"),
           h2(match.picked_stage.name),
+          div([img('.stage-icon', attrs: {src: match.picked_stage.img})]),
           div(".controls", [
             button("#{p1} won", onClick: call_match(:finish_playing).with(0)),
             button("#{p2} won", onClick: call_match(:finish_playing).with(1))
@@ -278,7 +308,11 @@ class StagePicker < Prism::Component
       ]
     when :game_over
       [
-        h1("#{p1} won!"),
+        if match.p1_won?
+          h1("#{p1} won!")
+        else
+          h1("#{p2} won!")
+        end,
         button("Play again", onClick: call(:reset) )
       ]
     else
@@ -298,10 +332,11 @@ class StagePicker < Prism::Component
     div('.match-stats', [
       div({class: {active: current_player == p1}}, [
         div(p1),
-        div(match.p1_score.to_s)
+        div('.scoreboard', match.p1_score.to_s)
       ]),
       div('.info', [
-        div("Bo#{@best_of}"),
+        div("Best of"),
+        div('.scoreboard', @best_of.to_s),
 
         div(
           case match.state
@@ -318,7 +353,7 @@ class StagePicker < Prism::Component
       ]),
       div({class: {active: current_player == p2}}, [
         div(p2),
-        div(match.p2_score.to_s)
+        div('.scoreboard', match.p2_score.to_s)
       ])
     ])
   end

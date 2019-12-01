@@ -15,6 +15,7 @@ module Prism
     end
 
     def render
+      @@instances = {}
       JSON::stringify(@component.render)
     end
 
